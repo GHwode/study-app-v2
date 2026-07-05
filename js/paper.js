@@ -409,7 +409,7 @@ const PaperMaker = {
         html += '</div>';
         
         container.innerHTML = html;
-        showPage('paper');
+        App.showPage('paper');
     },
 
     pickSubject(subject) {
