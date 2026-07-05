@@ -235,7 +235,7 @@ const TeachingMode = {
         
         // 快捷入口
         html += '<div class="card"><div class="card-title">🚀 快捷入口</div>';
-        html += '<div class="grid grid-3">';
+        html += '<div class="grid grid-5">';
         html += '<div class="teach-action-card" onclick="TeachingMode.renderRollCall()"><div class="icon">🎯</div><div class="label">随机点名</div></div>';
         html += '<div class="teach-action-card" onclick="TeachingMode.startQuiz()"><div class="icon">📝</div><div class="label">随堂测验</div></div>';
         html += '<div class="teach-action-card" onclick="TeachingMode.renderBlackboard()"><div class="icon">✏️</div><div class="label">电子板书</div></div>';

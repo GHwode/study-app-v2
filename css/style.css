@@ -33,6 +33,7 @@ body{font-family:"SimSun","Songti SC","STSong","Noto Serif SC",serif;background:
 .grid-2{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
 .grid-3{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
 .grid-4{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.grid-5{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
 
 /* ===== 学科卡片 ===== */
 .subject-card{background:var(--card);border:1px solid var(--border);padding:1.2rem 0.8rem;text-align:center;cursor:pointer;transition:all 0.2s}
