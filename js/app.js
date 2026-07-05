@@ -141,12 +141,12 @@ const App = {
         html += '</div></div>';
         
         // 答题入口
-        html += '<div class="card"><div class="card-title">🎯 在线答题</div>';
+        html += '<div class="card" style="margin-top:0.8rem"><div class="card-title">🎯 在线答题</div>';
         html += '<div class="topic-item" onclick="Quiz.start(\'' + subject + '\', ' + grade + ')"><span>开始答题（随机出题）</span><span class="arrow">›</span></div>';
         html += '</div>';
         
         // 考试入口
-        html += '<div class="card"><div class="card-title">📝 模拟考试</div>';
+        html += '<div class="card" style="margin-top:0.8rem"><div class="card-title">📝 模拟考试</div>';
         html += '<div class="topic-item" onclick="Exam.start(\'' + subject + '\', ' + grade + ')"><span>进入考试模式（带倒计时和暂停）</span><span class="arrow">›</span></div>';
         html += '</div>';
         
