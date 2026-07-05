@@ -188,6 +188,10 @@ const PaperMaker = {
         const subjectName = SUBJECTS[subject]?.name || subject;
         const gradeLabel = GRADE_NAMES[grade];
         
+        // 保存当前选择
+        this._pickedSubject = subject;
+        this._pickedGrade = grade;
+        
         let html = '';
         html += '<div class="breadcrumb">';
         html += '<a onclick="showPage(\'subject\')">选择学科</a> › ';
@@ -260,9 +264,9 @@ const PaperMaker = {
 
     // 生成并展示试卷
     generateAndShow() {
-        const state = App.state;
-        const subject = state.currentSubject;
-        const grade = state.currentGrade;
+        // 优先用从首页入口传入的学科/年级，否则用内部状态
+        const subject = this._pickedSubject || (App.state?.currentSubject) || 'shuxue';
+        const grade = this._pickedGrade || (App.state?.currentGrade) || 1;
         
         // 获取选中的单元
         const checkboxes = document.querySelectorAll('.unit-checkbox:checked');
