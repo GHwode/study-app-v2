@@ -9,6 +9,7 @@ function showToast(msg, duration=2000) {
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
     App.updateNav();
+    Textbook.initDefaultData();
 });
 
 window.App = App;
