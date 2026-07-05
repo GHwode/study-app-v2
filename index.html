@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全学段学习助手 V2</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="app-header">
+<div class="header-top">
+<div class="app-title"><span class="title-icon">📖</span><span id="headerTitle">全学段学习助手</span></div>
+<button class="back-btn" id="backBtn" onclick="goBack()">← 返回</button>
+</div>
+<nav class="nav-bar" id="mainNav"></nav>
+</header>
+<main class="main-container">
+<!-- 首页 -->
+<div class="page active" id="page-home">
+<div class="card">
+<div class="card-title">📚 选择学科</div>
+<p class="subtitle">覆盖小学1年级至初中3年级 · 河南中考/统考格式</p>
+<div class="grid grid-4" id="subjectGrid"></div>
+</div>
+<div class="card">
+<div class="card-title">⚡ 快速开始</div>
+<div class="grid grid-2">
+<div class="topic-item" onclick="startQuickQuiz('all')">🎯 综合练习（随机出题）</div>
+<div class="topic-item" onclick="showPage('wrongbook')">📕 错题本</div>
+<div class="topic-item" onclick="showPage('stats')">📈 学习统计</div>
+<div class="topic-item" onclick="showPage('review')">🧠 AI考点总结</div>
+</div>
+</div>
+</div>
+<!-- 各页面占位 -->
+<div class="page" id="page-subject"></div>
+<div class="page" id="page-grade"></div>
+<div class="page" id="page-chapter"></div>
+<div class="page" id="page-knowledge"></div>
+<div class="page" id="page-quiz"></div>
+<div class="page" id="page-wrongbook"></div>
+<div class="page" id="page-stats"></div>
+<div class="page" id="page-review"></div>
+<div class="page" id="page-exam"></div>
+</main>
+<div class="toast" id="toast"></div>
+<script src="js/data.js"></script>
+<script src="js/questions.js"></script>
+<script src="js/app.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/exam.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/wrongbook.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>
