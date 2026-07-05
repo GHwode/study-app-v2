@@ -152,7 +152,7 @@ const App = {
         
         // 电子课本入口
         html += '<div class="card" style="margin-top:0.8rem"><div class="card-title">📖 电子课本</div>';
-        html += '<div class="topic-item" onclick="Textbook.initDefaultData(); Textbook.renderUnits(\'' + subject + '\', ' + grade + ')"><span>开始学习（知识点+例题+总结）</span><span class="arrow">›</span></div>';
+        html += '<div class="topic-item" onclick="Textbook.initDefaultData(); App.showPage(\'textbook\'); Textbook.renderUnits(\'' + subject + '\', ' + grade + ')"><span>开始学习（知识点+例题+总结）</span><span class="arrow">›</span></div>';
         html += '</div>';
         
         container.innerHTML = html;
