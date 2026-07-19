@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三年级语文上册生字学习系统</title>
+    <style>/* 三年级语文上册生字学习系统 - CSS样式 */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { text-align: center; color: white; margin-bottom: 30px; }
+header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+nav { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+nav button { padding: 12px 24px; border: none; border-radius: 25px; background: white; color: #667eea; font-size: 16px; cursor: pointer; transition: all 0.3s; }
+nav button:hover, nav button.active { background: #ffd700; color: #333; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.section { display: none; animation: fadeIn 0.5s; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 生字卡片样式 */
+.card-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+.character-card { background: white; border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s; cursor: pointer; }
+.character-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+.character-card .char { font-size: 4em; color: #667eea; margin-bottom: 10px; }
+.character-card .pinyin { font-size: 1.2em; color: #666; margin-bottom: 10px; }
+.character-card .strokes { font-size: 0.9em; color: #999; }
+.character-card .radical { font-size: 0.9em; color: #999; margin-top: 5px; }
+
+/* 听写模式样式 */
+.dictation-area { background: white; border-radius: 15px; padding: 30px; max-width: 600px; margin: 0 auto; }
+.dictation-area .character-display { font-size: 5em; text-align: center; color: #667eea; margin-bottom: 20px; }
+.dictation-area input { width: 100%; padding: 15px; font-size: 1.5em; border: 2px solid #ddd; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+.dictation-area input:focus { outline: none; border-color: #667eea; }
+.score-display { text-align: center; font-size: 1.2em; color: #333; margin-top: 20px; }
+.correct { color: #4caf50; }
+.incorrect { color: #f44336; }
+
+/* 多学科切换按钮 */
+.subject-nav { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+.subject-btn { padding: 10px 20px; border: none; border-radius: 20px; background: rgba(255,255,255,0.3); color: white; font-size: 15px; cursor: pointer; transition: all 0.3s; }
+.subject-btn:hover, .subject-btn.active { background: #ffd700; color: #333; transform: scale(1.05); }
+.subject-content { display: none; animation: fadeIn 0.5s; }
+.subject-content.active { display: block; }
+
+/* 数学模块样式 */
+.math-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+.math-card { background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+.math-card .formula { font-size: 2em; color: #ff6b6b; font-weight: bold; }
+.math-card .result { font-size: 1.5em; color: #4caf50; margin-top: 10px; }
+
+/* 英语模块样式 */
+.english-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
+.english-card { background: white; border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.3s; }
+.english-card:hover { transform: translateY(-3px); }
+.english-card .letter { font-size: 3em; color: #2196f3; font-weight: bold; }
+.english-card .word { font-size: 1.1em; color: #333; margin-top: 8px; }
+.english-card .chinese { font-size: 0.9em; color: #666; }
+.quiz-question { font-size: 1.3em; margin-bottom: 20px; color: #333; }
+.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.quiz-option { padding: 15px; border: 2px solid #ddd; border-radius: 10px; cursor: pointer; transition: all 0.3s; font-size: 1.1em; }
+.quiz-option:hover { border-color: #667eea; background: #f0f0ff; }
+.quiz-option.selected { border-color: #667eea; background: #667eea; color: white; }
+.quiz-option.correct-answer { border-color: #4caf50; background: #4caf50; color: white; }
+.quiz-option.wrong-answer { border-color: #f44336; background: #f44336; color: white; }
+.progress-bar { width: 100%; height: 10px; background: #eee; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.3s; }
+</style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 三年级语文上册生字学习系统</h1>
+            <p>部编版 · 快乐学习每一天 ❤️</p>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('cards')">📖 生字卡片</button>
+            <button onclick="showSection('dictation')">✍️ 听写练习</button>
+            <button onclick="showSection('quiz')">🎯 趣味测验</button>
+            <button onclick="showSection('wordgame')">🎮 组词游戏</button>
+        </nav>
+
+        <!-- 生字卡片区域 -->
+        <section id="cards" class="section active">
+            <div class="unit-selector">
+                <label>选择单元：</label>
+                <select id="unitSelect" onchange="loadCharacters()">
+                    <option value="0">第1单元 学校生活</option>
+                    <option value="1">第2单元 金秋时节</option>
+                    <option value="2">第3单元 传统文化</option>
+                    <option value="3">第4单元 预测单元</option>
+                    <option value="4">第5单元 习作单元——观察</option>
+                    <option value="5">第6单元 自然景观</option>
+                    <option value="6">第7单元 观察与发现</option>
+                    <option value="7">第8单元 童话世界</option>
+                </select>
+                <label style="margin-left: 20px;">选择课文：</label>
+                <select id="lessonSelect" onchange="loadCharacters()">
+                </select>
+            </div>
+            <div id="cardContainer" class="card-container"></div>
+        </section>
+
+        <!-- 听写练习区域 -->
+        <section id="dictation" class="section">
+            <div class="dictation-area">
+                <h2>✍️ 听写练习</h2>
+                <div id="dictationContent">
+                    <div class="character-display" id="dictChar">?</div>
+                    <input type="text" id="dictInput" placeholder="请输入听到的生字" maxlength="1">
+                    <button onclick="checkDictation()" style="width: 100%; padding: 15px; font-size: 1.2em; background: #667eea; color: white; border: none; border-radius: 10px; cursor: pointer;">✅ 确认</button>
+                    <div class="score-display" id="dictScore">得分：0/0</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 趣味测验区域 -->
+        <section id="quiz" class="section">
+            <div class="quiz-area">
+                <h2>🎯 趣味测验</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div id="quizContent">
+                    <div class="quiz-question" id="quizQuestion">准备好了吗？</div>
+                    <div class="quiz-options" id="quizOptions"></div>
+                </div>
+                <div class="score-display" id="quizScore">得分：0/0</div>
+            </div>
+        </section>
+
+        <!-- 组词游戏区域 -->
+        <section id="wordgame" class="section">
+            <div class="dictation-area">
+                <h2>🎮 组词游戏</h2>
+                <div id="wordGameContent">
+                    <p style="text-align: center; font-size: 1.2em; margin-bottom: 20px;">给下面的字组词吧！</p>
+                    <div class="character-display" id="gameChar">?</div>
+                    <input type="text" id="gameInput" placeholder="输入词语" style="margin-bottom: 15px;">
+                    <button onclick="checkWord()" style="width: 100%; padding: 15px; font-size: 1.2em; background: #667eea; color: white; border: none; border-radius: 10px; cursor: pointer;">✅ 检查</button>
+                    <div id="wordResult" style="text-align: center; margin-top: 20px; font-size: 1.1em;"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 生字数据
+        const SANXIA_DATA = {json.dumps(chinese_data, ensure_ascii=False, indent=2)};
+
+        // 获取所有生字
+        function getAllCharacters() {{
+            const allChars = [];
+            SANXIA_DATA.units.forEach((unit, unitIndex) => {{
+                unit.lessons.forEach((lesson, lessonIndex) => {{
+                    lesson.characters.forEach((char, charIndex) => {{
+                        allChars.push({{
+                            ...char,
+                            unit: unitIndex + 1,
+                            unitTitle: unit.title,
+                            lesson: lesson.lesson,
+                            lessonIndex: lessonIndex,
+                            charIndex: charIndex
+                        }});
+                    }});
+                }});
+            }});
+            return allChars;
+        }}
+
+        // 获取指定单元和课文的生字
+        function getCharacters(unitIndex, lessonIndex) {{
+            const unit = SANXIA_DATA.units[unitIndex];
+            if (!unit) return [];
+            const lesson = unit.lessons[lessonIndex];
+            if (!lesson) return [];
+            return lesson.characters.map(char => {{
+                return {{ ...char, lesson: lesson.lesson, unitTitle: unit.title }};
+            }});
+        }}
+
+        // 单元选择器联动
+        document.getElementById('unitSelect').addEventListener('change', function() {{
+            const unitIndex = parseInt(this.value);
+            const lessonSelect = document.getElementById('lessonSelect');
+            lessonSelect.innerHTML = '';
+            if (SANXIA_DATA.units[unitIndex]) {{
+                SANXIA_DATA.units[unitIndex].lessons.forEach((lesson, index) => {{
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = lesson.lesson;
+                    lessonSelect.appendChild(option);
+                }});
+            }}
+            loadCharacters();
+        }});
+
+        // 切换section
+        function showSection(sectionId) {{
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }}
+
+        // 文字转语音
+        function speak(text) {{
+            if ('speechSynthesis' in window) {{
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'zh-CN';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            }}
+        }}
+
+        // 加载生字卡片
+        function loadCharacters() {{
+            const unitIndex = parseInt(document.getElementById('unitSelect').value);
+            const lessonIndex = parseInt(document.getElementById('lessonSelect').value);
+            const container = document.getElementById('cardContainer');
+            const characters = getCharacters(unitIndex, lessonIndex);
+            container.innerHTML = '';
+            characters.forEach(char => {{
+                const card = document.createElement('div');
+                card.className = 'character-card';
+                card.innerHTML = `
+                    <div class="char">{{char.char}}</div>
+                    <div class="pinyin">{{char.pinyin}}</div>
+                    <div class="strokes">共{{char.strokes}}画</div>
+                    <div class="radical">部首：{{char.radical}}</div>
+                    <div style="margin-top:10px;font-size:0.9em;color:#666;">
+                        {{char.words.slice(0, 4).join(' · ')}}
+                    </div>
+                `;
+                card.addEventListener('click', () => speak(char.char));
+                container.appendChild(card);
+            }});
+        }}
+
+        // 听写练习
+        let dictationIndex = 0, dictationScore = 0, dictationTotal = 0, currentChar = null;
+        function initDictation() {{
+            const allChars = getAllCharacters();
+            allChars.sort(() => Math.random() - 0.5);
+            window._dictationChars = allChars;
+            nextDictation();
+        }}
+        function nextDictation() {{
+            const allChars = window._dictationChars;
+            if (dictationIndex >= allChars.length) {{
+                dictationIndex = 0;
+                allChars.sort(() => Math.random() - 0.5);
+            }}
+            currentChar = allChars[dictationIndex];
+            document.getElementById('dictChar').textContent = '?';
+            document.getElementById('dictInput').value = '';
+            document.getElementById('dictInput').focus();
+            speak(currentChar.char);
+        }}
+        function checkDictation() {{
+            const input = document.getElementById('dictInput').value.trim();
+            const result = document.getElementById('dictScore');
+            if (!input) return;
+            dictationTotal++;
+            if (input === currentChar.char) {{
+                dictationScore++;
+                result.innerHTML = `<span style="color:#4caf50">✅ 正确！</span> 得分：${{dictationScore}}/${{dictationTotal}}`;
+                speak('正确');
+            }} else {{
+                result.innerHTML = `<span style="color:#f44336">❌ 正确答案是：{{currentChar.char}}</span> 得分：${{dictationScore}}/${{dictationTotal}}`;
+            }}
+            dictationIndex++;
+            setTimeout(nextDictation, 1500);
+        }}
+
+        // 趣味测验
+        let quizIndex = 0, quizScore = 0, quizTotal = 0, quizQuestions = [];
+        function generateQuizQuestions() {{
+            const allChars = getAllCharacters();
+            quizQuestions = [];
+            allChars.forEach(char => {{
+                const options = [char.pinyin];
+                while (options.length < 4) {{
+                    const randomChar = allChars[Math.floor(Math.random() * allChars.length)];
+                    if (!options.includes(randomChar.pinyin)) options.push(randomChar.pinyin);
+                }}
+                options.sort(() => Math.random() - 0.5);
+                quizQuestions.push({{
+                    type: 'pinyin',
+                    question: `请选择"${char.char}"的正确拼音：`,
+                    options: options,
+                    answer: char.pinyin
+                }});
+            }});
+            quizQuestions.sort(() => Math.random() - 0.5);
+        }}
+        function initQuiz() {{
+            generateQuizQuestions();
+            showNextQuestion();
+        }}
+        function showNextQuestion() {{
+            if (quizIndex >= quizQuestions.length) {{
+                quizIndex = 0;
+                generateQuizQuestions();
+            }}
+            const q = quizQuestions[quizIndex];
+            document.getElementById('quizQuestion').textContent = `${{quizIndex + 1}}. ${{q.question}}`;
+            const optionsDiv = document.getElementById('quizOptions');
+            optionsDiv.innerHTML = '';
+            q.options.forEach(opt => {{
+                const btn = document.createElement('div');
+                btn.className = 'quiz-option';
+                btn.textContent = opt;
+                btn.onclick = () => checkAnswer(btn, opt, q.answer);
+                optionsDiv.appendChild(btn);
+            }});
+            document.getElementById('progressFill').style.width = ${{((quizIndex + 1) / quizQuestions.length) * 100}}%;
+        }}
+        function checkAnswer(element, selected, correct) {{
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            quizTotal++;
+            if (selected === correct) {{
+                quizScore++;
+                element.classList.add('correct-answer');
+                speak('正确');
+            }} else {{
+                element.classList.add('wrong-answer');
+                options.forEach(opt => {{ if (opt.textContent === correct) opt.classList.add('correct-answer'); }});
+            }}
+            document.getElementById('quizScore').textContent = `得分：${{quizScore}}/${{quizTotal}}`;
+            setTimeout(() => {{ quizIndex++; showNextQuestion(); }}, 1500);
+        }}
+
+        // 组词游戏
+        let gameIndex = 0, gameScore = 0, gameTotal = 0, gameChars = [];
+        function initWordGame() {{
+            gameChars = getAllCharacters().slice(0, 50);
+            gameChars.sort(() => Math.random() - 0.5);
+            nextWordGame();
+        }}
+        function nextWordGame() {{
+            if (gameIndex >= gameChars.length) {{
+                gameIndex = 0;
+                gameChars.sort(() => Math.random() - 0.5);
+            }}
+            const char = gameChars[gameIndex];
+            document.getElementById('gameChar').textContent = char.char;
+            document.getElementById('gameInput').value = '';
+            document.getElementById('wordResult').innerHTML = '';
+            document.getElementById('gameInput').focus();
+            speak(char.char);
+        }}
+        function checkWord() {{
+            const input = document.getElementById('gameInput').value.trim();
+            const result = document.getElementById('wordResult');
+            const char = gameChars[gameIndex];
+            if (!input) return;
+            gameTotal++;
+            if (input.includes(char.char)) {{
+                gameScore++;
+                result.innerHTML = `<span style="color:#4caf50">✅ 正确！</span> 词语中包含"${char.char}"`;
+                speak('很好');
+            }} else {{
+                result.innerHTML = `<span style="color:#f44336">❌ 请包含"${char.char}"字</span>`;
+            }}
+            gameIndex++;
+            setTimeout(nextWordGame, 2000);
+        }}
+
+        // 初始化
+        window.addEventListener('load', function() {{
+            loadCharacters();
+            initDictation();
+            initQuiz();
+            initWordGame();
+        }});
+    </script>
+</body>
+</html>
